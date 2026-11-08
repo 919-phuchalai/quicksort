@@ -1,4 +1,8 @@
-﻿import random
+import random
+import sys
+
+# Tăng giới hạn đệ quy để chịu tải các test case mảng lớn
+sys.setrecursionlimit(200000)
 
 def partition(arr, low, high):
     """Phân đoạn 3 phần Dutch National Flag với pivot ngẫu nhiên"""
@@ -20,10 +24,16 @@ def partition(arr, low, high):
     return lt, gt
 
 def quick_sort(arr, low, high):
-    if low < high:
+    """Khử đệ quy đuôi để tối ưu độ sâu ngăn xếp O(log N)"""
+    while low < high:
         lt, gt = partition(arr, low, high)
-        quick_sort(arr, low, lt - 1)
-        quick_sort(arr, gt + 1, high)
+        # Đệ quy trên phân vùng nhỏ hơn trước, lặp cho phân vùng lớn hơn
+        if lt - low < high - gt:
+            quick_sort(arr, low, lt - 1)
+            low = gt + 1
+        else:
+            quick_sort(arr, gt + 1, high)
+            high = lt - 1
 
 def sort_numbers(arr):
     if len(arr) > 1:
