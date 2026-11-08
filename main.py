@@ -1,4 +1,4 @@
-﻿import sys
+import sys
 from quicksort import sort_numbers
 
 def main():
@@ -10,6 +10,12 @@ def main():
         
         n = int(input_data[0])
         elements = [int(x) for x in input_data[1:]]
+        
+        # Kiểm tra tính toàn vẹn dữ liệu: số lượng phần tử phải khớp với N
+        if n < 0 or len(elements) != n:
+            sys.stdout.write("-1\n")
+            return
+            
         sort_numbers(elements)
         sys.stdout.write(" ".join(map(str, elements)) + "\n")
     except Exception:
