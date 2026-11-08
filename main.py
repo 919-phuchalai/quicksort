@@ -1,25 +1,37 @@
+"""
+Entrypoint xử lý nhập/xuất chuẩn (StdIn / StdOut) cho bài toán
+Sắp xếp điểm số tuyển sinh Đại học FPT bằng QuickSort.
+"""
 import sys
-from quicksort import sort_numbers
+from quicksort import sort_candidates
 
 def main():
     try:
-        input_data = sys.stdin.read().split()
-        if not input_data:
-            sys.stdout.write("-1\n")
+        raw_text = sys.stdin.read().strip()
+        if not raw_text:
             return
-        
-        n = int(input_data[0])
-        elements = [int(x) for x in input_data[1:]]
-        
-        # Kiểm tra tính toàn vẹn dữ liệu: số lượng phần tử phải khớp với N
-        if n < 0 or len(elements) != n:
-            sys.stdout.write("-1\n")
+
+        tokens = raw_text.split()
+        if not tokens:
             return
-            
-        sort_numbers(elements)
-        sys.stdout.write(" ".join(map(str, elements)) + "\n")
-    except Exception:
-        sys.stdout.write("-1\n")
+
+        n = int(tokens[0])
+        candidate_tokens = tokens[1:]
+
+        # Mỗi thí sinh gồm đúng 2 token: mã thí sinh và điểm số
+        candidates = []
+        for i in range(min(n, len(candidate_tokens) // 2)):
+            cid = candidate_tokens[i * 2]
+            score = float(candidate_tokens[i * 2 + 1])
+            candidates.append((cid, score))
+
+        sort_candidates(candidates)
+
+        # Định dạng output: Mỗi dòng gồm Mã thí sinh và Điểm số làm tròn 2 chữ số thập phân
+        output_lines = [f"{cid} {score:.2f}" for cid, score in candidates]
+        sys.stdout.write("\n".join(output_lines) + "\n")
+    except Exception as e:
+        sys.stderr.write(f"Error: {e}\n")
 
 if __name__ == "__main__":
     main()
